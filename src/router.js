@@ -5,6 +5,8 @@ import Search from "./pages/Search";
 import Upload from "./pages/Upload";
 import Alarm from "./pages/Alarm";
 import MyPage from "./pages/MyPage";
+import BottomTab from "./components/BottomTab"; // BottomTab 컴포넌트 불러오기
+
 const AppRouter = () => {
   return (
     <Router>
@@ -15,6 +17,7 @@ const AppRouter = () => {
         <Route path="/alarm" element={<Alarm />} />
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
+      <BottomTab />
     </Router>
   );
 };
