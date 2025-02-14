@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useOutletContext } from "react-router-dom"; // useOutletContext 사용
 import useModalStore from "../../store/useModalStore";
-import { getAllRelay, getTicklesData } from "../../apis/relayApi";
-import {
-  handlePrevious,
-  handleNext,
-  calculateImgRatio,
-} from "../../utils/relayUtils";
+import { getAllRelay } from "../../apis/relayApi";
+import { handlePrevious, handleNext } from "../../utils/relayUtils";
 import ImgWithBlur from "../../components/common/ImgWithBlur";
 
 const Relay = () => {
-  const [tickle, setTickle] = useState(null);
+  const { relayData } = useOutletContext(); // Outlet에서 전달된 relayData 받기
   const [allRelay, setAllRelay] = useState([]);
   const { openModal } = useModalStore();
   const { relayId, tickleId } = useParams();
@@ -20,9 +17,7 @@ const Relay = () => {
   useEffect(() => {
     const fetchRelayData = async () => {
       try {
-        const response = await getTicklesData(tickleId);
         const allRelayData = await getAllRelay(relayId);
-        setTickle(response.data);
         setAllRelay(allRelayData.data.tickleThumbnails);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -33,7 +28,7 @@ const Relay = () => {
       fetchRelayData();
     }
 
-    //모달관리
+    // 모달관리
     let count = parseInt(localStorage.getItem("visitCount")) || 0;
     count += 1;
     localStorage.setItem("visitCount", count);
@@ -47,7 +42,7 @@ const Relay = () => {
   return (
     <Container>
       <ImageWrapper>
-        <ImgWithBlur imageSrc={tickle?.tickleImage} />
+        <ImgWithBlur imageSrc={relayData?.tickleImage} />
       </ImageWrapper>
       <NavButtons>
         <button
@@ -96,12 +91,4 @@ const NavButtons = styled.div`
     z-index: 2;
     user-select: none;
   }
-`;
-
-const BlurBackground = styled.img`
-  position: absolute;
-  width: 130%;
-  height: 130%;
-  object-fit: cover;
-  filter: blur(10px) brightness(0.7);
 `;

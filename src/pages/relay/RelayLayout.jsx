@@ -7,7 +7,7 @@ import { getTicklesData } from "../../apis/relayApi";
 
 const RelayLayout = () => {
   const [relayData, setRelayData] = useState(null);
-  const { relayId, tickleId } = useParams();
+  const { tickleId } = useParams();
 
   useEffect(() => {
     const fetchRelayData = async () => {
@@ -26,7 +26,10 @@ const RelayLayout = () => {
 
   return (
     <Container>
-      <RelayHeader title={relayData?.relayTitle} description={relayData?.relayDescription} />
+      <RelayHeader
+        title={relayData?.relayTitle}
+        description={relayData?.relayDescription}
+      />
       <Outlet context={{ relayData }} />
       <BottomBar relayData={relayData} />
     </Container>
